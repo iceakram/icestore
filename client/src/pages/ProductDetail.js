@@ -26,7 +26,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
   const { formatPrice } = useCountry();
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);

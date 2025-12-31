@@ -9,6 +9,7 @@ const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 const { sendWelcomeEmail } = require('../utils/email');
+const { authLimiter, createAccountLimiter } = require('../middleware/rateLimit');
 
 // Validation middleware
 const registerValidation = [
@@ -28,7 +29,7 @@ const loginValidation = [
  * @desc    Register a new user
  * @access  Public
  */
-router.post('/register', registerValidation, async (req, res) => {
+router.post('/register', createAccountLimiter, registerValidation, async (req, res) => {
   try {
     // Check validation errors
     const errors = validationResult(req);
@@ -94,7 +95,7 @@ router.post('/register', registerValidation, async (req, res) => {
  * @desc    Login user
  * @access  Public
  */
-router.post('/login', loginValidation, async (req, res) => {
+router.post('/login', authLimiter, loginValidation, async (req, res) => {
   try {
     // Check validation errors
     const errors = validationResult(req);

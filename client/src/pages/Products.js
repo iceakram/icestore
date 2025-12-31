@@ -7,13 +7,12 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import api from '../utils/api';
-import { useCountry, COUNTRIES } from '../context/CountryContext';
+import { COUNTRIES } from '../context/CountryContext';
 import ProductCard from '../components/products/ProductCard';
 import Loading from '../components/common/Loading';
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { selectedCountry } = useCountry();
   
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -39,14 +38,23 @@ const Products = () => {
       setLoading(true);
       try {
         const params = new URLSearchParams();
-        if (filters.search) params.append('search', filters.search);
-        if (filters.category) params.append('category', filters.category);
-        if (filters.country) params.append('country', filters.country);
-        if (filters.minPrice) params.append('minPrice', filters.minPrice);
-        if (filters.maxPrice) params.append('maxPrice', filters.maxPrice);
-        if (filters.featured) params.append('featured', filters.featured);
-        params.append('sort', filters.sort);
-        params.append('page', filters.page);
+        const search = searchParams.get('search') || '';
+        const category = searchParams.get('category') || '';
+        const country = searchParams.get('country') || '';
+        const minPrice = searchParams.get('minPrice') || '';
+        const maxPrice = searchParams.get('maxPrice') || '';
+        const featured = searchParams.get('featured') || '';
+        const sort = searchParams.get('sort') || '-createdAt';
+        const page = parseInt(searchParams.get('page')) || 1;
+
+        if (search) params.append('search', search);
+        if (category) params.append('category', category);
+        if (country) params.append('country', country);
+        if (minPrice) params.append('minPrice', minPrice);
+        if (maxPrice) params.append('maxPrice', maxPrice);
+        if (featured) params.append('featured', featured);
+        params.append('sort', sort);
+        params.append('page', page);
         params.append('limit', 12);
 
         const { data } = await api.get(`/products?${params.toString()}`);

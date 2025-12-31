@@ -30,7 +30,7 @@ const ProductCard = ({ product }) => {
   const imageUrl = product.images?.[0]?.url || 'https://placehold.co/600x400/1e293b/9b59b6?text=No+Image';
 
   return (
-    <Link to={`/products/${product._id}`} className="product-card block">
+    <Link to={`/products/${product._id}`} className="product-card block group">
       {/* Image Container */}
       <div className="relative overflow-hidden aspect-[4/3]">
         <img

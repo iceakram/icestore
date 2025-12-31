@@ -92,9 +92,12 @@ userSchema.methods.comparePassword = async function(enteredPassword) {
 
 // Generate JWT token
 userSchema.methods.generateToken = function() {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable must be set');
+  }
   return jwt.sign(
     { id: this._id, role: this.role },
-    process.env.JWT_SECRET || 'fallback_secret',
+    process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRE || '30d' }
   );
 };

@@ -23,8 +23,15 @@ exports.protect = async (req, res, next) => {
       });
     }
 
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+    // Verify token - JWT_SECRET must be set in environment
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET environment variable is not set');
+      return res.status(500).json({
+        success: false,
+        message: 'Server configuration error'
+      });
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Get user from token
     const user = await User.findById(decoded.id);

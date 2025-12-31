@@ -73,7 +73,7 @@
 
   /* Product cards */
   .product-card {
-    @apply glass-card-hover overflow-hidden group;
+    @apply glass-card-hover overflow-hidden;
   }
 
   .product-card-image {
